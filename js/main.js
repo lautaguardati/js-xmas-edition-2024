@@ -15,14 +15,14 @@ function validarNombre($nombre) {
 }
 
 function validarCiudad($ciudad) {
-    if ($ciudad == "") {
+    if ($ciudad.length === 0) {
         return "Debe seleccionar la ciudad donde vive"
     }
     return ""
 }
 
 function validarDescripcionRegalo($descripcionRegalo) {
-    if ($descripcionRegalo == "") {
+    if ($descripcionRegalo.length === 0) {
         return "Debe escribir lo que quiere recibir."
     }
     return ""
