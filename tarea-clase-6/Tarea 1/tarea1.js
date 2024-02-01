@@ -1,4 +1,5 @@
 document.querySelector("#add-family-members").onclick = () => {
+    validateNumberOfFamilyMembers();
     addFamilyMembers();
     hideButton();
     addButton();
@@ -138,4 +139,14 @@ function showCalculateButton() {
 
 function clearAddInput() {
     document.querySelector("#number-of-family-members").value = "";
+}
+
+
+
+function validateNumberOfFamilyMembers(numberOfFamilyMembers) {
+    numberOfFamilyMembers = numberOfFamilyMembers = Number(document.querySelector("#number-of-family-members").value)
+    if (numberOfFamilyMembers <= 0) {
+        document.querySelector("#number-of-family-members").className = "error"
+        return "Este campo no puede estar vacío"
+    } document.querySelector("#number-of-family-members").className = ""
 }
