@@ -1,8 +1,7 @@
 const $form = document.querySelector("#carta-a-santa");
 const nombre = document.formulario.nombre.value;
 const ciudad = document.formulario.ciudad.value;
-const descripcionRegalo = document.formulario["descripcion-regalo"].value
-
+const descripcionRegalo = document.formulario["descripcion-regalo"].value;
 
 function validarNombre(nombre) {
     if (nombre.length == 0) {
@@ -14,27 +13,27 @@ function validarNombre(nombre) {
     if (!/^[a-z]+$/i.test(nombre)) {
         return "El campo nombre solo acepta letras";
     }
-    return ""
+    return "";
 }
 
 function validarCiudad(ciudad) {
     if (ciudad.length === 0) {
         return "Debe seleccionar la ciudad donde vive"
     }
-    return ""
+    return "";
 }
 
 function validarDescripcionRegalo(descripcionRegalo) {
     if (descripcionRegalo.length === 0) {
-        return "El campo de descripción no puede estar vacío"
+        return "El campo de descripción no puede estar vacío";
     }
     if (descripcionRegalo.length >= 100) {
-        return "El campo de descripción no puede tener más de 100 caracteres"
+        return "El campo de descripción no puede tener más de 100 caracteres";
     }
     if (!/^[A-z0-9 ]+$/.test(descripcionRegalo)) {
-        return "El campo de descripción solo puede tener números y letras"
+        return "El campo de descripción solo puede tener números y letras";
     }
-    return ""
+    return "";
 }
 
 
@@ -53,15 +52,21 @@ function validarFormulario(event) {
         nombre: errorNombre,
         ciudad: errorCiudad,
         "descripcion-regalo": errorDescripcionRegalo,
-    }
+    };
 
-    console.log(manejarErrores(errores));
+    const esExito = manejarErrores(errores) === 0;
+    if (esExito) {
+        document.querySelector("form").className = "oculto";
+        document.querySelector("#exito").className = "";
+        redireccionar();
+    }
     event.preventDefault();
 }
 
 function manejarErrores(errores) {
+    document.querySelector("#errores").textContent = "";
     const keys = Object.keys(errores);
-    const $errores = document.querySelector("#errores")
+    const $errores = document.querySelector("#errores");
     let cantidadErrores = 0;
     keys.forEach(function (key) {
         const error = errores[key];
@@ -76,5 +81,13 @@ function manejarErrores(errores) {
             $form[key].className = "";
         }
     })
-    return cantidadErrores
+    return cantidadErrores;
+}
+
+function redireccionar() {
+    setTimeout(irALaWishlist, 5000);
+}
+
+function irALaWishlist() {
+    window.location.href = "wishlist.html";
 }
