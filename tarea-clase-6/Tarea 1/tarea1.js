@@ -2,8 +2,8 @@ document.querySelector("#add-family-members").onclick = () => {
     validateNumberOfFamilyMembers();
     addFamilyMembers();
     hideButton();
-    addButton();
-    createCleanerButton();
+    document.querySelector("#calculate-button").className = ""
+    document.querySelector("#reset-button").className = ""
 }
 
 function addFamilyMembers(numberOfFamilyMembers) {
@@ -21,7 +21,7 @@ function addFamilyMembers(numberOfFamilyMembers) {
 
         $newLabel.appendChild($newInput);
         $divNode.appendChild($newLabel);
-        document.querySelector("form").appendChild($divNode)
+        document.querySelector("#family-members").appendChild($divNode)
     }
 }
 
@@ -29,27 +29,18 @@ function hideButton(numberOfFamilyMembers) {
     numberOfFamilyMembers = Number(document.querySelector("#number-of-family-members").value);
     const button = document.querySelector("#add-family-members");
     if (numberOfFamilyMembers > 0) {
-        button.setAttribute("hidden", "true");
+        button.className = "oculto";
     }
 }
 
-const $calculateButton = document.createElement("button");
-function addButton() {
-    $calculateButton.textContent = "Calcular";
-    $calculateButton.type = "submit";
-    $calculateButton.id = "calculate-button"
-    document.querySelector("form").appendChild($calculateButton);
-}
-
-
-
+const $calculateButton = document.querySelector("#calculate-button")
 $calculateButton.onclick = () => {
     createNumbers();
     obtainOldestMember();
     obtainYoungestMember();
     obtainAverageFamilyAge();
-    $calculateButton.setAttribute("hidden", "true");
-    showHiddenParagraph();
+    $calculateButton.className = "oculto"
+    document.querySelector("#paragraph").className = ""
     return false;
 }
 
@@ -90,29 +81,21 @@ function obtainAverageFamilyAge(total) {
     document.querySelector("#average-family-age").textContent = total + " años.";
 }
 
-function showHiddenParagraph() {
-    document.querySelector("p").removeAttribute("hidden");
-}
-
-const $resetButton = document.createElement("button");
-function createCleanerButton() {
-    $resetButton.textContent = "Reiniciar";
-    $resetButton.type = "button";
-    document.querySelector("form").appendChild($resetButton);
-}
+const $resetButton = document.querySelector("#reset-button")
 
 $resetButton.onclick = () => {
     showAddButton();
     removeFamilyMemebers();
     resetCalculousValues();
     hideParagraph();
-    showCalculateButton();
     clearAddInput();
     document.querySelector("#number-of-family-members").className = ""
+    document.querySelector("#reset-button").className = "oculto"
+    document.querySelector("#calculate-button").className = "oculto"
 }
 
 function showAddButton() {
-    document.querySelector("#add-family-members").removeAttribute("hidden");
+    document.querySelector("#add-family-members").className = ""
 }
 
 function removeFamilyMemebers() {
@@ -130,11 +113,7 @@ function hideParagraph() {
     document.querySelector("#age-oldest-family-member").textContent = "";
     document.querySelector("#age-youngest-family-member").textContent = "";
     document.querySelector("#average-family-age").textContent = "";
-    document.querySelector("p").setAttribute("hidden", "true")
-}
-
-function showCalculateButton() {
-    document.querySelector("#calculate-button").removeAttribute("hidden");
+    document.querySelector("#paragraph").className = "oculto"
 }
 
 function clearAddInput() {
@@ -150,3 +129,5 @@ function validateNumberOfFamilyMembers(numberOfFamilyMembers) {
         return "Este campo no puede estar vacío"
     } document.querySelector("#number-of-family-members").className = ""
 }
+
+
