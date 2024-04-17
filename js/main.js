@@ -5,10 +5,10 @@ const descripcionRegalo = document.formulario["descripcion-regalo"].value;
 
 function validarNombre(nombre) {
     if (nombre.length == 0) {
-        return "Este campo debe tener al menos 1 caracter";
+        return "El campo nombre debe tener al menos 1 caracter";
     }
     if (nombre.length >= 50) {
-        return "Este campo debe tener menos de 50 caracteres";
+        return "El campo nombre debe tener menos de 50 caracteres";
     }
     if (!/^[a-z]+$/i.test(nombre)) {
         return "El campo nombre solo acepta letras";
@@ -25,13 +25,13 @@ function validarCiudad(ciudad) {
 
 function validarDescripcionRegalo(descripcionRegalo) {
     if (descripcionRegalo.length === 0) {
-        return "El campo de descripción no puede estar vacío";
+        return "El campo de descripción del regalo no puede estar vacío";
     }
     if (descripcionRegalo.length >= 100) {
-        return "El campo de descripción no puede tener más de 100 caracteres";
+        return "El campo de descripción del regalo no puede tener más de 100 caracteres";
     }
     if (!/^[A-z0-9 ]+$/.test(descripcionRegalo)) {
-        return "El campo de descripción solo puede tener números y letras";
+        return "El campo de descripción del regalo solo puede tener números y letras";
     }
     return "";
 }
@@ -56,7 +56,7 @@ function validarFormulario(event) {
 
     const esExito = manejarErrores(errores) === 0;
     if (esExito) {
-        document.querySelector("form").className = "oculto";
+        $form.className = "oculto";
         document.querySelector("#exito").className = "";
         redireccionar();
     }
@@ -64,9 +64,9 @@ function validarFormulario(event) {
 }
 
 function manejarErrores(errores) {
-    document.querySelector("#errores").textContent = "";
     const keys = Object.keys(errores);
     const $errores = document.querySelector("#errores");
+    $errores.innerHTML = "";
     let cantidadErrores = 0;
     keys.forEach(function (key) {
         const error = errores[key];
@@ -85,9 +85,7 @@ function manejarErrores(errores) {
 }
 
 function redireccionar() {
-    setTimeout(irALaWishlist, 5000);
-}
-
-function irALaWishlist() {
-    window.location.href = "wishlist.html";
+    setTimeout(function irALaWishlist() {
+        window.location.href = "wishlist.html"
+    }, 5000);
 }
