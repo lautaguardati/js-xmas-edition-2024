@@ -1,7 +1,9 @@
+const $form = document.querySelector("form")
 document.querySelector("#add-familiar").onclick = function () {
     addMember();
 }
 
+let memberNumber = 0;
 function addMember() {
     const $divNode = document.createElement("div");
     $divNode.className = "member";
@@ -11,41 +13,40 @@ function addMember() {
 
     const $newInput = document.createElement("input");
     $newInput.type = "number";
-    $newInput.className = "salary"
-    $newInput.name = "salary"
+    $newInput.name = "salary-member-" + memberNumber
 
     document.querySelector("form").appendChild($divNode);
     $divNode.appendChild($newLabel);
     $newLabel.appendChild($newInput);
+    memberNumber++;
 }
 
 document.querySelector("#remove-familiar").onclick = function () {
-    removeMember();
-}
-
-function removeMember() {
     document.querySelector(".member").remove();
 }
 
 document.querySelector("#calculate-button").onclick = function () {
     createNumbers();
-    findHighestSalary();
-    findLowestSalary();
-    findAverageAnnualSalary();
-    findAverageMensualSalary();
-    showResults();
+    if (numbers.length > 0) {
+        if (!manageErrorsInSalary()) {
+            findHighestSalary();
+            findLowestSalary();
+            findAverageAnnualSalary();
+            findAverageMensualSalary();
+            showResults();
+        }
+        showErrors();
+    }
     return false;
 }
 
 let numbers = []
-let numbersWithoutFilter = []
 function createNumbers($salarys) {
-    let numbersWithoutFilter = []
-    $salarys = document.querySelectorAll("input[name=salary");
+    numbers = [];
+    $salarys = document.querySelectorAll("form input");
     for (i = 0; i < $salarys.length; i++) {
-        numbersWithoutFilter.push(parseInt($salarys[i].value));
+        numbers.push(parseInt($salarys[i].value));
     }
-    numbers = numbersWithoutFilter.filter((numbersWithoutFilter) => numbersWithoutFilter > null || "" || NaN)
 }
 
 function findHighestSalary(highestSalary) {
@@ -87,10 +88,41 @@ function findAverageMensualSalary(total, monthsInAYear, mensualAverage) {
     document.querySelector("#average-mensual-salary").textContent = mensualAverage + "$";
 }
 
-function showResults(){
-    document.querySelector("p").removeAttribute("hidden")
+function showResults() {
+    document.querySelector("#results").className = ""
 }
 
+let errors;
+function manageErrorsInSalary() {
+    errors = 0;
+    errorSalaryInputs = {
+    }
+    for (let i = 0; i < numbers.length; i++) {
+        if (validateMemberSalary(numbers[i])) {
+            errors++;
+        }
+        errorSalaryInputs["salary-member-" + i] = validateMemberSalary(numbers[i]);
+    }
+    return errors;
+}
 
+function validateMemberSalary(salary) {
+    if (isNaN(salary) || salary === "" || salary === 0) {
+        return "El campo de salario del familiar no puede estar vacío"
+    } else if (!/^[0-9]+$/.test(salary)) {
+        return "El campo de salario del familiar solo acepta números"
+    } else
+        return ""
+}
 
-
+function showErrors() {
+    let keys = Object.keys(errorSalaryInputs)
+    keys.forEach(function (key) {
+        const error = errorSalaryInputs[key]
+        if (error) {
+            $form[key].className = "error"
+        } else 
+            $form[key].className = ""
+    })
+    return false;
+}
