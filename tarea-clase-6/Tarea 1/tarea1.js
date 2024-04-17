@@ -167,7 +167,7 @@ function validateAgeOfFamilyMembers($ageOfFamilyMembers) {
 
 function manageErrors() {
     const keys = Object.keys(ageErrors)
-    keys.forEach(function (key) {
+    keys.forEach((key) => {
         const error = ageErrors[key]
         if (error){
             $form[key].className = "error"
@@ -176,5 +176,3 @@ function manageErrors() {
         }
     })
 }
-
-
