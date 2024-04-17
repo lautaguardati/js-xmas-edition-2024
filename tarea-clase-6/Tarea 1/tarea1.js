@@ -2,6 +2,7 @@ let errores;
 const $form = document.querySelector("form")
 
 document.querySelector("#add-family-members").onclick = () => {
+
     if (!validateNumberOfFamilyMembers()) {
         addFamilyMembers();
         document.querySelector("#number-of-family-members").className = ""
@@ -28,9 +29,10 @@ function addFamilyMembers(numberOfFamilyMembers) {
 
         $newLabel.appendChild($newInput);
         $divNode.appendChild($newLabel);
-        document.querySelector("form").appendChild($divNode)
+        document.querySelector("#family-members").appendChild($divNode)
     }
 }
+
 
 const $calculateButton = document.querySelector("#calculate-button")
 $calculateButton.onclick = () => {
@@ -41,6 +43,7 @@ $calculateButton.onclick = () => {
         obtainAverageFamilyAge();
         showResults();
     }
+
     return false;
 }
 
@@ -81,6 +84,7 @@ function obtainAverageFamilyAge(total) {
     total = total / numbers.length;
     document.querySelector("#average-family-age").textContent = total + " años.";
 }
+
 
 function showResults() {
     document.querySelector("#results").className = ""
@@ -172,3 +176,5 @@ function manageErrors() {
         }
     })
 }
+
+
