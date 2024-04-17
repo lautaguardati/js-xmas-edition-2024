@@ -22,7 +22,10 @@ function addMember() {
 }
 
 document.querySelector("#remove-familiar").onclick = function () {
-    document.querySelector(".member").remove();
+    if (memberNumber > 0) {
+        document.querySelector("form").lastChild.remove();
+        memberNumber--;
+    }
 }
 
 document.querySelector("#calculate-button").onclick = function () {
@@ -121,7 +124,7 @@ function showErrors() {
         const error = errorSalaryInputs[key]
         if (error) {
             $form[key].className = "error"
-        } else 
+        } else
             $form[key].className = ""
     })
 }
