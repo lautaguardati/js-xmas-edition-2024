@@ -124,5 +124,4 @@ function showErrors() {
         } else 
             $form[key].className = ""
     })
-    return false;
 }
