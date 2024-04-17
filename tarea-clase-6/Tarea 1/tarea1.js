@@ -1,9 +1,16 @@
+let errores;
+const $form = document.querySelector("form")
+
 document.querySelector("#add-family-members").onclick = () => {
-    validateNumberOfFamilyMembers();
-    addFamilyMembers();
-    hideButton();
-    addButton();
-    createCleanerButton();
+    if (!validateNumberOfFamilyMembers()) {
+        addFamilyMembers();
+        document.querySelector("#number-of-family-members").className = ""
+        document.querySelector("#add-family-members").className = "oculto"
+        document.querySelector("#calculate-button").className = ""
+        document.querySelector("#reset-button").className = ""
+    } else {
+        document.querySelector("#number-of-family-members").className = "error"
+    }
 }
 
 function addFamilyMembers(numberOfFamilyMembers) {
@@ -16,7 +23,7 @@ function addFamilyMembers(numberOfFamilyMembers) {
         $newLabel.textContent = "Ingrese la edad del familiar:";
 
         const $newInput = document.createElement("input");
-        $newInput.name = "age-of-family-member";
+        $newInput.name = "age-of-family-member" + "-" + [i]
         $newInput.type = "number";
 
         $newLabel.appendChild($newInput);
@@ -25,37 +32,22 @@ function addFamilyMembers(numberOfFamilyMembers) {
     }
 }
 
-function hideButton(numberOfFamilyMembers) {
-    numberOfFamilyMembers = Number(document.querySelector("#number-of-family-members").value);
-    const button = document.querySelector("#add-family-members");
-    if (numberOfFamilyMembers > 0) {
-        button.setAttribute("hidden", "true");
-    }
-}
-
-const $calculateButton = document.createElement("button");
-function addButton() {
-    $calculateButton.textContent = "Calcular";
-    $calculateButton.type = "submit";
-    $calculateButton.id = "calculate-button"
-    document.querySelector("form").appendChild($calculateButton);
-}
-
-
-
+const $calculateButton = document.querySelector("#calculate-button")
 $calculateButton.onclick = () => {
     createNumbers();
-    obtainOldestMember();
-    obtainYoungestMember();
-    obtainAverageFamilyAge();
-    $calculateButton.setAttribute("hidden", "true");
-    showHiddenParagraph();
+    if (!errorOfAgeOfFamilyMembers()) {
+        obtainOldestMember();
+        obtainYoungestMember();
+        obtainAverageFamilyAge();
+        showResults();
+    }
     return false;
 }
 
 let numbers = [];
 function createNumbers($ageOfFamilyMembers) {
-    $ageOfFamilyMembers = document.querySelectorAll("input[name=age-of-family-member");
+    numbers = [];
+    $ageOfFamilyMembers = document.querySelectorAll(".member input");
     for (i = 0; i < $ageOfFamilyMembers.length; i++) {
         numbers.push(parseInt($ageOfFamilyMembers[i].value));
     }
@@ -90,29 +82,24 @@ function obtainAverageFamilyAge(total) {
     document.querySelector("#average-family-age").textContent = total + " años.";
 }
 
-function showHiddenParagraph() {
-    document.querySelector("p").removeAttribute("hidden");
+function showResults() {
+    document.querySelector("#results").className = ""
 }
 
-const $resetButton = document.createElement("button");
-function createCleanerButton() {
-    $resetButton.textContent = "Reiniciar";
-    $resetButton.type = "button";
-    document.querySelector("form").appendChild($resetButton);
-}
-
+const $resetButton = document.querySelector("#reset-button")
 $resetButton.onclick = () => {
     showAddButton();
     removeFamilyMemebers();
-    resetCalculousValues();
-    hideParagraph();
-    showCalculateButton();
+    resetValues();
+    hideResults();
     clearAddInput();
-    document.querySelector("#number-of-family-members").className = ""
+    document.querySelector("#calculate-button").className = "oculto"
+    document.querySelector("#add-family-members").className = ""
+    $resetButton.className = "oculto"
 }
 
 function showAddButton() {
-    document.querySelector("#add-family-members").removeAttribute("hidden");
+    document.querySelector("#add-family-members").className = ""
 }
 
 function removeFamilyMemebers() {
@@ -122,19 +109,18 @@ function removeFamilyMemebers() {
     }
 }
 
-function resetCalculousValues() {
+function resetValues() {
     numbers = []
-}
-
-function hideParagraph() {
     document.querySelector("#age-oldest-family-member").textContent = "";
     document.querySelector("#age-youngest-family-member").textContent = "";
     document.querySelector("#average-family-age").textContent = "";
-    document.querySelector("p").setAttribute("hidden", "true")
 }
 
-function showCalculateButton() {
-    document.querySelector("#calculate-button").removeAttribute("hidden");
+function hideResults() {
+    document.querySelector("#age-oldest-family-member").textContent = "";
+    document.querySelector("#age-youngest-family-member").textContent = "";
+    document.querySelector("#average-family-age").textContent = "";
+    document.querySelector("#results").className = "oculto"
 }
 
 function clearAddInput() {
@@ -142,11 +128,47 @@ function clearAddInput() {
 }
 
 
-
 function validateNumberOfFamilyMembers(numberOfFamilyMembers) {
-    numberOfFamilyMembers = numberOfFamilyMembers = Number(document.querySelector("#number-of-family-members").value)
-    if (numberOfFamilyMembers <= 0) {
-        document.querySelector("#number-of-family-members").className = "error"
+    numberOfFamilyMembers = Number(document.querySelector("#number-of-family-members").value)
+    if (numberOfFamilyMembers == 0) {
+        return "El campo cantidad de familiares no puede estar vacío"
+    }
+    if (!/^[0-9]{1,2}$/.test(numberOfFamilyMembers)) {
+        return "El campo cantidad de familiares solo puede tener números entre 1 y 99"
+    }
+    return ""
+}
+
+function errorOfAgeOfFamilyMembers() {
+    errores = 0;
+    ageErrors = {
+    }
+    for (let i = 0; i < numbers.length; i++) {
+        if (validateAgeOfFamilyMembers(numbers[i]) != "") {
+            errores++
+        }
+        ageErrors["age-of-family-member-" + i] = validateAgeOfFamilyMembers(numbers[i])
+    }
+    manageErrors()
+    return errores
+}
+
+function validateAgeOfFamilyMembers($ageOfFamilyMembers) {
+    if (isNaN($ageOfFamilyMembers) || $ageOfFamilyMembers === "" || $ageOfFamilyMembers === 0) {
         return "Este campo no puede estar vacío"
-    } document.querySelector("#number-of-family-members").className = ""
+    } else if ($ageOfFamilyMembers >= 150) {
+        return "Este campo no puede ser mayor a 150"
+    } else return ""
+}
+
+function manageErrors() {
+    const keys = Object.keys(ageErrors)
+    keys.forEach(function (key) {
+        const error = ageErrors[key]
+        if (error){
+            $form[key].className = "error"
+        } else {
+            $form[key].className = ""
+        }
+    })
 }
