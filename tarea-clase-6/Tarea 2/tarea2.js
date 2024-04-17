@@ -38,13 +38,14 @@ document.querySelector("#calculate-button").onclick = function () {
 }
 
 let numbers = []
+let numbersWithoutFilter = []
 function createNumbers($salarys) {
-    let newnumbers = []
+    let numbersWithoutFilter = []
     $salarys = document.querySelectorAll("input[name=salary");
     for (i = 0; i < $salarys.length; i++) {
-        newnumbers.push(parseInt($salarys[i].value));
+        numbersWithoutFilter.push(parseInt($salarys[i].value));
     }
-    numbers = newnumbers.filter((newnumbers) => newnumbers > null || "" || NaN)
+    numbers = numbersWithoutFilter.filter((numbersWithoutFilter) => numbersWithoutFilter > null || "" || NaN)
 }
 
 function findHighestSalary(highestSalary) {
@@ -89,3 +90,7 @@ function findAverageMensualSalary(total, monthsInAYear, mensualAverage) {
 function showResults(){
     document.querySelector("p").removeAttribute("hidden")
 }
+
+
+
+
